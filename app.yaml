@@ -1,0 +1,9 @@
+runtime: python37
+handlers:
+  - url: /
+    static_files: dist/ebay-app/index.html
+    upload: dist/ebay-app/index.html
+  - url: /
+    static_dir: dist/ebay-app
+  - url: /assets/images
+    static_dir: dist/ebay-app/assets/images

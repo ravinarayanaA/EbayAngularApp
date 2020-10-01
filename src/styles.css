@@ -1,0 +1,340 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+/* You can add global styles to this file, and also import other style files */
+.form-check-label {
+  font-weight: bold;
+}
+
+.checkboxes label {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.checkboxes input {
+  vertical-align: middle;
+}
+
+pagination-controls pagination-template {
+  margin: auto !important;
+  font-weight: 500;
+}
+
+.alert {
+  margin-bottom: 0.5rem;
+}
+
+.table td {
+  padding: 0.5rem;
+}
+
+.checkboxes label span {
+  vertical-align: middle;
+  margin-left: 0.15rem;
+}
+
+.form-check-inline {
+  margin-right: 0.5rem;
+}
+
+body {
+  font-size: 0.75rem;
+  font-family: sans-serif;
+}
+
+p {
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+#outer_container {
+  padding: 0;
+}
+
+#ebay_logo {
+  object-fit: cover;
+  width: 100%;
+  padding-top: 5%;
+}
+
+label, .custom_label {
+  font-weight: bold;
+}
+
+#search-btn {
+  filter: brightness(0) invert(1);
+  width: 28%;
+  vertical-align: top;
+}
+
+#clear-btn {
+  filter: brightness(0) invert(1);
+  width: 35%;
+  vertical-align: top;
+}
+
+.custom-table {
+  margin-bottom: 0 !important;
+}
+
+#card_1 {
+  margin-top: 0;
+}
+
+.cards {
+
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+#pagination2, #pagination_content2 {
+  display: flex !important;
+}
+
+#pagination2 {
+  margin-left: auto !important;
+}
+
+#pagination1, #pagination_content1 {
+  display: none !important;
+}
+
+.alert-warning {
+  color: black !important;
+  text-align: center;
+  border: black;
+}
+
+pagination-template ul {
+  padding-left: 0rem !important;
+}
+
+.form-check-inline .form-check-input {
+  margin-right: 0rem;
+}
+
+#clear-btn-parent:hover {
+  color: black;
+}
+
+.img-thumbnail {
+  background-color: transparent;
+  border: transparent;
+}
+
+
+@media (min-width: 750px) {
+
+  .img-thumbnail {
+    max-height: 10rem;
+  }
+
+  .checkboxes label {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .checkboxes input {
+    vertical-align: middle;
+  }
+
+  .checkboxes label span {
+    vertical-align: middle;
+    margin-left: 0.25rem;
+  }
+
+  #pagination2, #pagination_content2 {
+    display: flex !important;
+  }
+
+  #pagination2 {
+    margin: auto !important;
+    margin-right: 0 !important;
+  }
+
+  pagination1, #pagination_content1 {
+    display: none !important;
+  }
+
+  body {
+    font-size: 0.75rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  #search-btn {
+    filter: brightness(0) invert(1);
+    width: 29%;
+    vertical-align: top;
+  }
+
+  #clear-btn {
+    filter: brightness(0) invert(1);
+    width: 37%;
+    vertical-align: top;
+  }
+
+  #ebay_logo {
+    padding-top: 10%;
+  }
+
+  .cards {
+
+  }
+
+  .form-check-inline .form-check-input {
+    margin-right: 0rem;
+  }
+
+  .form-control {
+    font-size: 0.85rem;
+  }
+
+  .custom-select {
+    font-size: 0.75rem;
+  }
+
+  #test1 {
+    margin-right: 0 !important;
+  }
+
+
+}
+
+@media (min-device-width: 768px)
+and (max-device-width: 1024px)
+and (orientation: landscape) {
+  .img-thumbnail {
+    max-height: 10rem;
+  }
+
+  body {
+    font-size: 0.6rem;
+  }
+
+  .btn {
+    font-size: 0.65rem;
+  }
+
+  element {
+
+  }
+
+  a {
+
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+
+  }
+
+  h5, .h5 {
+
+    font-size: 1rem;
+
+  }
+
+  h4, .h4 {
+    font-size: 1.25rem;
+  }
+
+  .form-control {
+    font-size: 0.65rem;
+  }
+
+  .custom-select {
+    font-size: 0.65rem;
+  }
+}
+
+
+@media (min-width: 1030px) {
+  #test {
+    margin-right: 7% !important;
+  }
+
+  .checkboxes label {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .checkboxes input {
+    vertical-align: middle;
+  }
+
+  .checkboxes label span {
+    vertical-align: middle;
+    margin-left: 0.25rem;
+  }
+
+  #pagination2, #pagination_content2 {
+    display: none !important;
+  }
+
+  #pagination1, #pagination_content1 {
+    display: flex !important;
+  }
+
+
+  #test1 {
+    display: none !important;
+  }
+
+  body {
+    font-size: 0.9rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  #search-btn {
+    filter: brightness(0) invert(1);
+    width: 29%;
+    vertical-align: top;
+  }
+
+  #clear-btn {
+    filter: brightness(0) invert(1);
+    width: 37%;
+    vertical-align: top;
+  }
+
+  #ebay_logo {
+    padding-top: 10%;
+  }
+
+  .cards {
+
+  }
+
+  .form-check-inline .form-check-input {
+    margin-right: 0rem;
+  }
+}
+
+.custom-card {
+  background-color: #d0d0d0;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.card-content {
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+
+.card-image {
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}
+

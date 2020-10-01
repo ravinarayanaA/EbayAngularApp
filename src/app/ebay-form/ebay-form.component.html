@@ -1,0 +1,405 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()" id="ebay_form" #ref>
+  <div class="container-fluid">
+    <div id="outer_container" class="col-12 col-md-10 col-lg-6 offset-md-1 offset-lg-3">
+      <div class="mx-auto col-12 col-md-4 col-lg-4 col-sm-4">
+        <a target="_blank" href="https://www.ebay.com"><img id="ebay_logo" class="img-responsive fit-image "
+                                                            src="assets/images/eBayLogo.png"/></a>
+      </div>
+
+      <div class="form-group row" [ngClass]="{ 'has-error': invalidkeyword() }">
+        <label for="keywords" class="col-md-2 col-lg-2 col-sm-2 col-12 col-form-label">Key Words<span style="color: red">*</span></label>
+        <div class="col-md-10 col-lg-10 col-sm-10 col-12">
+          <input type="text" formControlName="keyword" class="form-control" id="keywords" placeholder="Enter Keywords">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-md-2 col-lg-2 col-sm-2 col-10 col-form-label">Price Range</label>
+        <div class="col-md-5 col-lg-5 col-sm-5 col-6">
+          <input type="text" formControlName="price_lower" class="form-control" step=any name="price-range-lower"
+                 id="lower"
+                 placeholder="Min Price">
+        </div>
+        <div class="col-md-5 col-lg-5 col-sm-5 col-6">
+          <input type="text" formControlName="price_upper" class="form-control" step=any name="price-range-upper"
+                 id="upper"
+                 placeholder="Max Price">
+        </div>
+      </div>
+      <div class="row form-group">
+        <span class="col-md-2 col-lg-2 col-sm-2 col-12 custom_label">Conditions</span>
+        <div class="col-md-10 col-lg-10 col-sm-10 col-12">
+          <div class="form-check form-check-inline checkboxes" *ngFor="let choice of conditions; let i=index">
+            <label class="form-check-label">
+              <input class="form-check-input condition" type="checkbox" [value]="choice.value"
+                     (change)="onCheckChange($event)">
+              <span>{{choice.value}}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <span class="col-md-2 col-lg-2 col-sm-2 col-12 custom_label">Seller</span>
+        <div class="col-md-10 col-lg-10 col-sm-10 col-10">
+          <div class="form-check form-check-inline">
+            <div class="form-check form-check-inline checkboxes" *ngFor="let choice of returnAccepted; let i=index">
+              <label class="form-check-label">
+                <input class="form-check-input seller" type="checkbox" [value]="choice.value"
+                       (change)="onCheckChange($event)">
+                <span>{{choice.value}}</span>
+              </label>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <span class="col-md-2 col-lg-2 col-sm-2 col-12 custom_label">Shipping</span>
+        <div class="col-md-10 col-lg-10 col-sm-10 col-10">
+          <div class="form-check form-check-inline">
+            <div class="form-check form-check-inline checkboxes" *ngFor="let choice of shipping; let i=index;">
+              <label class="form-check-label">
+                <input class="form-check-input shipping" type="checkbox" [value]="choice.value"
+                       (change)="onCheckChange($event)">
+                <span>{{choice.value}}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <span class="col-md-2 col-lg-2 col-sm-2 col-12 custom_label">Sort Order</span>
+        <div class="col-md-10 col-lg-10 col-sm-10 col-12">
+          <select formControlName="sortorder" class="custom-select">
+            <option [selected]="'Best Match'" value="Best Match">BestMatch</option>
+            <option value="Price: highest first">CurrentPriceHighest</option>
+            <option value="Price + Shipping: highest first">PricePlusShippingHighest</option>
+            <option value="Price + Shipping: lowest first">PricePlusShippingLowest</option>
+          </select>
+        </div>
+      </div>
+      <div class="d-flex flex-row-reverse">
+        <div style="padding: 0!important;">
+          <button id="clear-btn-parent" type="button" class="btn btn-secondary" (click)="reset_form(ref)"><img
+            id="clear-btn"
+            src="assets/images/clear.svg">Clear
+          </button>
+        </div>
+        <div style="margin-right: 1%;">
+          <button type="submit" class="btn btn-primary" style="background-color:#2f6eac;border:#6c95bf;height: 100%;">
+            <img
+              id="search-btn"
+              src="assets/images/search.svg">Search
+          </button>
+        </div>
+      </div>
+      <div style="margin-top: 6rem">
+        <div *ngIf="invalidkeyword()" [hidden]="resetflag" id="keyword_error" class="alert alert-warning" role="alert">
+          Please enter a keyword
+        </div>
+        <div *ngIf="userForm.errors != null?userForm.errors['range']&&submitted:false" [hidden]="resetflag"
+             id="price_error"
+             class="alert alert-warning" role="alert">
+          Please use appropriate values for minPrice/maxPrice
+        </div>
+        <div *ngIf="userForm.errors != null;"></div>
+        <div *ngIf="numresults === 0 && registered &&  !get_error_flag()" [hidden]="resetflag"
+             id="result_error"
+             class="alert alert-warning" role="alert">
+          No exact matches found
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="outer_card_div" *ngIf="numresults !== 0" [hidden]="resetflag || !registered" class="col-12 col-sm-12 col-md-12 col-lg-12">
+    <div style="margin-top: 6rem;font-weight: 600;"
+         class="offset-md-1 offset-lg-2 col-lg-2 col-md-10 col-lg-8 col-sm-12">
+
+      <div class="row">
+        <div class="d-block d-md-flex justify-content-md-start justify-content-start"
+             *ngIf="registered">
+          <h4>Results for {{keyword}}</h4>
+        </div>
+        <div class="d-flex mx-auto" id="test">
+          <pagination-controls id="pagination1" style="margin-bottom: 0;" maxSize="10" autoHide="true" responsive="false"
+                               (pageChange)="p1 = $event"></pagination-controls>
+        </div>
+        <div class="d-md-flex ml-md-auto mx-auto" id="test1">
+          <pagination-controls id="pagination2" autoHide="true" maxSize="5" responsive="false"
+                               (pageChange)="p1 = $event"></pagination-controls>
+        </div>
+      </div>
+    </div>
+      <div id="pagination_content1" *ngFor="let item of items | paginate: { itemsPerPage: 5, currentPage: p1, id: 'pagination1'};let i = index">
+        <div [attr.id]="'card_' + (i+1)" class="col-12 custom-card offset-md-1 offset-lg-2 col-md-10 col-lg-8 col-sm-12 cards">
+          <div class="row">
+            <div class="col-12 col-md-2 col-lg-2 col-sm-2 col-sm-2 card-image">
+              <img src="{{item['item_image_url']}}" class="img-thumbnail img-fluid mx-auto d-block img-inside" alt="">
+            </div>
+            <div class="col-12 col-md-10 col-lg-10 col-sm-10 card-content">
+              <h5 class="card-title"><a target="_blank"
+                                        href="{{item['item_ebay_link']}}">{{item['item_title']}}</a></h5>
+              <p class="card-text"><b>Price:</b> {{item['item_price']}}</p>
+              <p class="card-text"><i>{{item['ship_location']}}</i><a style="margin-left: 0.5rem;" class="btn btn-light"
+                                                                      (click)="hide_tab($event)"
+                                                                      id="first{{i+1}}"> Show
+                Details</a>
+              </p>
+              <div class="d-none" [attr.id]="'tab_first' + (i+1)">
+                <mat-tab-group animationDuration="0ms">
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      Basic Info
+                    </ng-template>
+                    <div class="table-borderless table custom-table">
+                      <tr>
+                        <td style="font-weight: 600;">Category Name</td>
+                        <td>{{item['item_category_tag']}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight: 600;">Condition</td>
+                        <td>{{item['item_condition']}}</td>
+                      </tr>
+                    </div>
+                  </mat-tab>
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      Shipping Info
+                    </ng-template>
+                    <div class="table-borderless table custom-table">
+                      <tr>
+                        <td style="font-weight: 600;">ShippingType</td>
+                        <td>{{item['shippingType']}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight: 600;">Shipping Cost</td>
+                        <td>{{item['shipping_cost']}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight: 600;">Shiptolocations</td>
+                        <td>{{item['ship_to_locations']}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight: 600;">ExpeditedShipping</td>
+                        <td>
+                          <mat-icon *ngIf="item['expedited_shipping']==='true'" [ngStyle]="{'color':'green'}"
+                                    aria-hidden="false" aria-label="done icon">
+                            done
+                          </mat-icon>
+                          <mat-icon *ngIf="item['expedited_shipping']==='false'" [ngStyle]="{'color':'red'}"
+                                    aria-hidden="false"
+                                    aria-label="clear icon">clear
+                          </mat-icon>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight: 600;">OneDayShippingAvailable</td>
+                        <td>
+                          <mat-icon *ngIf="item['OneDayShippingAvailable']==='true'" [ngStyle]="{'color':'green'}"
+                                    aria-hidden="false" aria-label="done icon">
+                            done
+                          </mat-icon>
+                          <mat-icon *ngIf="item['OneDayShippingAvailable']==='false'" [ngStyle]="{'color':'red'}"
+                                    aria-hidden="false"
+                                    aria-label="clear icon">clear
+                          </mat-icon>
+                        </td>
+                      </tr>
+                    </div>
+                  </mat-tab>
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      Listing Info
+                    </ng-template>
+                    <div class="table-borderless table custom-table">
+                      <tr>
+                        <td style="font-weight: 600;">BestOfferEnabled</td>
+                        <td>
+                          <mat-icon *ngIf="item['BestOfferEnabled']==='true'" [ngStyle]="{'color':'green'}"
+                                    aria-hidden="false" aria-label="done icon">
+                            done
+                          </mat-icon>
+                          <mat-icon *ngIf="item['BestOfferEnabled']==='false'" [ngStyle]="{'color':'red'}"
+                                    aria-hidden="false"
+                                    aria-label="clear icon">clear
+                          </mat-icon>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight: 600;">BuyItNowAvailable</td>
+                        <td>
+                          <mat-icon *ngIf="item['BuyItNowAvailable']==='true'" [ngStyle]="{'color':'green'}"
+                                    aria-hidden="false" aria-label="done icon">
+                            done
+                          </mat-icon>
+                          <mat-icon *ngIf="item['BuyItNowAvailable']==='false'" [ngStyle]="{'color':'red'}"
+                                    aria-hidden="false"
+                                    aria-label="clear icon">clear
+                          </mat-icon>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight: 600;">ListingType</td>
+                        <td>{{item['ListingType']}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight: 600;">Gift</td>
+                        <td>
+                          <mat-icon *ngIf="item['Gift']==='true'" [ngStyle]="{'color':'green'}" aria-hidden="false"
+                                    aria-label="done icon">
+                            done
+                          </mat-icon>
+                          <mat-icon *ngIf="item['Gift']==='false'" [ngStyle]="{'color':'red'}" aria-hidden="false"
+                                    aria-label="clear icon">clear
+                          </mat-icon>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight: 600;">WatchCount</td>
+                        <td>{{item['WatchCount']}}</td>
+                      </tr>
+                    </div>
+                  </mat-tab>
+                </mat-tab-group>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div id="pagination_content2" *ngFor="let item of items | paginate: { itemsPerPage: 5, currentPage: p1, id: 'pagination2'};let i = index">
+        <div [attr.id]="'card_' + (i+1)" class="col-12 custom-card offset-md-1 offset-lg-2 col-md-10 col-lg-8 col-sm-12 cards">
+          <div class="row">
+            <div class="col-12 col-md-2 col-lg-2 col-sm-2 col-sm-2 card-image">
+              <img src="{{item['item_image_url']}}" class="img-thumbnail img-fluid mx-auto d-block img-inside" alt="">
+            </div>
+            <div class="col-12 col-md-10 col-lg-10 col-sm-10 col-sm-10 card-content">
+              <h5 class="card-title"><a target="_blank"
+                                        href="{{item['item_ebay_link']}}">{{item['item_title']}}</a></h5>
+              <p class="card-text" style="font-size: 0.9rem"><b>Price:</b> {{item['item_price']}}</p>
+              <p class="card-text"><i>{{item['ship_location']}}</i><a style="margin-left: 0.5rem;" class="btn btn-light"
+                                                                      (click)="hide_tab($event)"
+                                                                      id="second{{i+1}}"> Show
+                Details</a>
+              </p>
+              <div class="d-none" [attr.id]="'tab_second' + (i+1)">
+                <mat-tab-group animationDuration="0ms">
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      Basic Info
+                    </ng-template>
+                    <div class="table-borderless table custom-table">
+                      <tr>
+                        <td>Category Name</td>
+                        <td>{{item['item_category_tag']}}</td>
+                      </tr>
+                      <tr>
+                        <td>Condition</td>
+                        <td>{{item['item_condition']}}</td>
+                      </tr>
+                    </div>
+                  </mat-tab>
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      Shipping Info
+                    </ng-template>
+                    <div class="table-borderless table custom-table">
+                      <tr>
+                        <td>ShippingType</td>
+                        <td>{{item['shippingType']}}</td>
+                      </tr>
+                      <tr>
+                        <td>Shipping Cost</td>
+                        <td>{{item['shipping_cost']}}</td>
+                      </tr>
+                      <tr>
+                        <td>Shiptolocations</td>
+                        <td>{{item['ship_to_locations']}}</td>
+                      </tr>
+                      <tr>
+                        <td>ExpeditedShipping</td>
+                        <td>
+                          <mat-icon *ngIf="item['expedited_shipping']==='true'" [ngStyle]="{'color':'green'}"
+                                    aria-hidden="false" aria-label="done icon">
+                            done
+                          </mat-icon>
+                          <mat-icon *ngIf="item['expedited_shipping']==='false'" [ngStyle]="{'color':'red'}"
+                                    aria-hidden="false"
+                                    aria-label="clear icon">clear
+                          </mat-icon>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>OneDayShippingAvailable</td>
+                        <td>
+                          <mat-icon *ngIf="item['OneDayShippingAvailable']==='true'" [ngStyle]="{'color':'green'}"
+                                    aria-hidden="false" aria-label="done icon">
+                            done
+                          </mat-icon>
+                          <mat-icon *ngIf="item['OneDayShippingAvailable']==='false'" [ngStyle]="{'color':'red'}"
+                                    aria-hidden="false"
+                                    aria-label="clear icon">clear
+                          </mat-icon>
+                        </td>
+                      </tr>
+                    </div>
+                  </mat-tab>
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      Listing Info
+                    </ng-template>
+                    <div class="table-borderless table custom-table">
+                      <tr>
+                        <td>BestOfferEnabled</td>
+                        <td>
+                          <mat-icon *ngIf="item['BestOfferEnabled']==='true'" [ngStyle]="{'color':'green'}"
+                                    aria-hidden="false" aria-label="done icon">
+                            done
+                          </mat-icon>
+                          <mat-icon *ngIf="item['BestOfferEnabled']==='false'" [ngStyle]="{'color':'red'}"
+                                    aria-hidden="false"
+                                    aria-label="clear icon">clear
+                          </mat-icon>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>BuyItNowAvailable</td>
+                        <td>
+                          <mat-icon *ngIf="item['BuyItNowAvailable']==='true'" [ngStyle]="{'color':'green'}"
+                                    aria-hidden="false" aria-label="done icon">
+                            done
+                          </mat-icon>
+                          <mat-icon *ngIf="item['BuyItNowAvailable']==='false'" [ngStyle]="{'color':'red'}"
+                                    aria-hidden="false"
+                                    aria-label="clear icon">clear
+                          </mat-icon>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>ListingType</td>
+                        <td>{{item['ListingType']}}</td>
+                      </tr>
+                      <tr>
+                        <td>Gift</td>
+                        <td>
+                          <mat-icon *ngIf="item['Gift']==='true'" [ngStyle]="{'color':'green'}" aria-hidden="false"
+                                    aria-label="done icon">
+                            done
+                          </mat-icon>
+                          <mat-icon *ngIf="item['Gift']==='false'" [ngStyle]="{'color':'red'}" aria-hidden="false"
+                                    aria-label="clear icon">clear
+                          </mat-icon>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>WatchCount</td>
+                        <td>{{item['WatchCount']}}</td>
+                      </tr>
+                    </div>
+                  </mat-tab>
+                </mat-tab-group>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</form>
